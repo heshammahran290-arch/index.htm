@@ -13,7 +13,6 @@
         :root { 
             --primary: #0f172a; --accent: #fbbf24; --section-color: #38bdf8; 
             --danger: #ef4444; --success: #10b981; --trash: #94a3b8; 
-            /* خلفية الموقع العامة */
             --main-bg-image: url("https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg"); 
         }
 
@@ -58,6 +57,11 @@
         .page { display: none; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(15px); border-radius: 25px; padding: 25px; margin-top: 15px; animation: fadeIn 0.3s ease-out; border: 1px solid rgba(255,255,255,0.1); }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
+        /* ستايل التبويبات الجديد */
+        .tabs-nav { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .tab-btn { background: rgba(255,255,255,0.1); color: #fff; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; flex: 1; font-weight: bold; transition: 0.3s; }
+        .tab-btn.active { background: var(--accent); color: #000; }
+
         .file-row { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
         .file-info { flex: 1; }
         .file-name { font-weight: bold; color: var(--accent); display: block; margin-bottom: 4px; }
@@ -90,23 +94,28 @@
 
 <div id="subjectPage" class="container page">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <button class="btn" style="background:#444;" onclick="goHome()">⬅ عودة</button>
+        <button class="btn" style="background:#444; color:white;" onclick="goHome()">⬅ عودة</button>
         <h2 id="currentTitle" style="color:var(--accent); margin:0;"></h2>
         <a id="ytLink" href="#" target="_blank" class="btn" style="background:#ff0000; color:white;">YouTube</a>
+    </div>
+
+    <div class="tabs-nav">
+        <button id="tabFiles" class="tab-btn active" onclick="switchTab('files')">📁 Folder</button>
+        <button id="tabAssignments" class="tab-btn" onclick="switchTab('assignments')">📝 Assignment</button>
     </div>
     
     <div style="background:rgba(255,255,255,0.02); padding:20px; border-radius:20px; text-align:center; border: 1px dashed #555;">
         <input type="text" id="fileNotes" placeholder="أضف ملاحظاتك للملف هنا..." style="width:85%; padding:12px; border-radius:10px; border:none; margin-bottom:15px; background:#000; color:#fff; text-align:center; font-family: inherit;">
         <br>
         <input type="file" id="fileInput" hidden onchange="handleUpload(this)">
-        <button class="btn" style="background:var(--accent); color:#000; width:100%; max-width: 300px;" onclick="document.getElementById('fileInput').click()">+ ارفع ملف</button>
+        <button class="btn" style="background:var(--accent); color:#000; width:100%; max-width: 300px;" onclick="document.getElementById('fileInput').click()">+ ارفع ملف في هذا القسم</button>
     </div>
     
     <div id="fileList" style="margin-top:30px;"></div>
 </div>
 
 <div id="trashPage" class="container page">
-    <button class="btn" style="background:#444;" onclick="goHome()">⬅ عودة</button>
+    <button class="btn" style="background:#444; color:white;" onclick="goHome()">⬅ عودة</button>
     <h2 style="text-align:center; color:var(--trash);">🗑 المحذوفات</h2>
     <div id="trashList"></div>
     <div id="trashControls" style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
@@ -117,7 +126,7 @@
 <div id="viewer">
     <div style="padding:15px; background:#111; display:flex; justify-content:space-between; align-items:center;">
         <span id="vFileName" style="color:var(--accent);">معاينة</span>
-        <button class="btn" style="background:var(--danger);" onclick="closeViewer()">إغلاق ✖</button>
+        <button class="btn" style="background:var(--danger); color:white;" onclick="closeViewer()">إغلاق ✖</button>
     </div>
     <iframe id="vFrame"></iframe>
 </div>
@@ -140,14 +149,23 @@
         { id: 207, name: "Section رياضيات متقطعة", icon: "📏", yt: "https://youtube.com/playlist?list=PLxIvc-MGOs6gZlMVYOOEtUHJmfUquCjwz", img: "https://images.pexels.com/photos/5426401/pexels-photo-5426401.jpeg?auto=compress&w=600", type: "section" }
     ];
 
-    let db; let storeName = "";
+    let db; 
+    let storeName = "";
+    let currentCategory = "files"; // 'files' or 'assignments'
+
     const req = indexedDB.open("EngHeshamFinal_v11", 1);
     
     req.onsuccess = e => { db = e.target.result; updateTrashCounter(); renderHome(); };
     req.onupgradeneeded = e => {
         db = e.target.result;
-        subjects.forEach(s => db.createObjectStore("sub_"+s.id, { keyPath: "id", autoIncrement: true }));
-        db.createObjectStore("recycle_bin", { keyPath: "id", autoIncrement: true });
+        subjects.forEach(s => {
+            if (!db.objectStoreNames.contains("sub_"+s.id)) {
+                db.createObjectStore("sub_"+s.id, { keyPath: "id", autoIncrement: true });
+            }
+        });
+        if (!db.objectStoreNames.contains("recycle_bin")) {
+            db.createObjectStore("recycle_bin", { keyPath: "id", autoIncrement: true });
+        }
     };
 
     function renderHome() {
@@ -165,11 +183,19 @@
 
     function openSubject(id, name, yt) { 
         storeName = "sub_"+id; 
+        currentCategory = "files";
         document.getElementById('homeScreen').style.display = 'none'; 
         document.getElementById('subjectPage').style.display = 'block'; 
         document.getElementById('currentTitle').innerText = name; 
         document.getElementById('ytLink').href = yt; 
-        loadFiles(); 
+        switchTab('files'); 
+    }
+
+    function switchTab(cat) {
+        currentCategory = cat;
+        document.getElementById('tabFiles').className = cat === 'files' ? 'tab-btn active' : 'tab-btn';
+        document.getElementById('tabAssignments').className = cat === 'assignments' ? 'tab-btn active' : 'tab-btn';
+        loadFiles();
     }
 
     function handleUpload(input) {
@@ -180,7 +206,7 @@
             const tx = db.transaction(storeName, "readwrite");
             tx.objectStore(storeName).add({ 
                 name: file.name, type: file.type, data: e.target.result, 
-                notes: noteText, date: new Date().toLocaleDateString('ar-EG') 
+                notes: noteText, category: currentCategory, date: new Date().toLocaleDateString('ar-EG') 
             });
             tx.oncomplete = () => { document.getElementById('fileNotes').value = ""; loadFiles(); };
         };
@@ -190,7 +216,8 @@
     function loadFiles() {
         const list = document.getElementById('fileList');
         db.transaction(storeName, "readonly").objectStore(storeName).getAll().onsuccess = e => {
-            list.innerHTML = e.target.result.map(f => `
+            const filtered = e.target.result.filter(f => (f.category || 'files') === currentCategory);
+            list.innerHTML = filtered.map(f => `
                 <div class="file-row">
                     <div class="file-info">
                         <span class="file-name">${f.name}</span>
@@ -200,7 +227,7 @@
                         <button class="btn btn-view" onclick="viewFile('${storeName}', ${f.id})">👀</button>
                         <button class="btn btn-delete" onclick="moveToTrash(${f.id})">🗑</button>
                     </div>
-                </div>`).join('');
+                </div>`).join('') || "<p style='text-align:center; color:#666;'>لا توجد ملفات في هذا القسم بعد</p>";
         };
     }
 
@@ -213,9 +240,7 @@
                 document.getElementById('vFrame').src = url;
                 document.getElementById('vFileName').innerText = f.name;
                 document.getElementById('viewer').style.display = 'flex';
-            } else {
-                window.open(url, '_blank');
-            }
+            } else { window.open(url, '_blank'); }
         };
     }
 
@@ -256,7 +281,7 @@
                         <button class="btn btn-restore" onclick="restoreFile(${f.id}, '${f.originalStore}')" title="استعادة">🔄</button>
                         <button class="btn btn-delete" onclick="deleteForever(${f.id})" title="حذف نهائي">❌</button>
                     </div>
-                </div>`).join(''); 
+                </div>`).join('') || "<p style='text-align:center;'>السلة فارغة</p>"; 
         }; 
     }
 
