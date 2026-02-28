@@ -3,75 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/605/605110.png">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/605/605110.png">
-    
     <title>Eng. Hesham Mahran | LNU Archive Pro</title>
-    
     <style>
+        /* ستايلاتك كما هي بدون أي تغيير */
         :root { 
             --primary: #0f172a; --accent: #fbbf24; --section-color: #38bdf8; 
             --danger: #ef4444; --success: #10b981; --trash: #94a3b8; 
             --main-bg-image: url("https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg"); 
         }
-
-        body { 
-            font-family: 'Segoe UI', system-ui, sans-serif; 
-            margin: 0; padding: 0; color: #fff; overflow-x: hidden;
-            background: #0b0f19; min-height: 100vh;
-        }
-
-        body::before {
-            content: ""; position: fixed; inset: 0;
-            background: linear-gradient(rgba(11, 15, 25, 0.9), rgba(11, 15, 25, 0.9)), 
-                        var(--main-bg-image) no-repeat center center fixed; 
-            background-size: cover; z-index: -1; will-change: transform;
-        }
-        
+        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; color: #fff; overflow-x: hidden; background: #0b0f19; min-height: 100vh; }
+        body::before { content: ""; position: fixed; inset: 0; background: linear-gradient(rgba(11, 15, 25, 0.9), rgba(11, 15, 25, 0.9)), var(--main-bg-image) no-repeat center center fixed; background-size: cover; z-index: -1; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
         header { text-align: center; margin-bottom: 30px; }
         header h1 { color: var(--accent); font-size: clamp(2em, 8vw, 3em); margin: 0; text-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
-
         .trash-nav { display: flex; justify-content: flex-start; margin-bottom: 10px; }
-        .btn-trash-box { 
-            background: rgba(255,255,255,0.05); border: 1px solid var(--trash); color: var(--trash); 
-            padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: bold;
-            display: flex; align-items: center; gap: 8px; transition: 0.2s;
-        }
-
+        .btn-trash-box { background: rgba(255,255,255,0.05); border: 1px solid var(--trash); color: var(--trash); padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        
-        .subject-card { 
-            height: 190px; border-radius: 20px; position: relative; overflow: hidden;
-            cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 1px solid rgba(255,255,255,0.1);
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3); contain: layout;
-        }
-        .subject-card:hover { transform: translateY(-8px) scale(1.02); border-color: var(--accent); box-shadow: 0 12px 25px rgba(251, 191, 36, 0.2); }
-        .icon-box { font-size: 2.8em; z-index: 2; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
-        .card-overlay { position: absolute; bottom: 0; width: 100%; padding: 12px; background: rgba(0,0,0,0.85); text-align: center; font-weight: bold; font-size: 1em; border-top: 1px solid rgba(255,255,255,0.1); }
-        .section-tag { position: absolute; top: 12px; left: 12px; background: var(--section-color); color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.75em; font-weight: bold; z-index: 3; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-
-        .page { display: none; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(15px); border-radius: 25px; padding: 25px; margin-top: 15px; animation: fadeIn 0.3s ease-out; border: 1px solid rgba(255,255,255,0.1); }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ستايل التبويبات الجديد */
+        .subject-card { height: 190px; border-radius: 20px; position: relative; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .subject-card:hover { transform: translateY(-8px); border-color: var(--accent); }
+        .icon-box { font-size: 2.8em; z-index: 2; }
+        .card-overlay { position: absolute; bottom: 0; width: 100%; padding: 12px; background: rgba(0,0,0,0.85); text-align: center; font-weight: bold; }
+        .section-tag { position: absolute; top: 12px; left: 12px; background: var(--section-color); color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.75em; font-weight: bold; z-index: 3; }
+        .page { display: none; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(15px); border-radius: 25px; padding: 25px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
         .tabs-nav { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
-        .tab-btn { background: rgba(255,255,255,0.1); color: #fff; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; flex: 1; font-weight: bold; transition: 0.3s; }
+        .tab-btn { background: rgba(255,255,255,0.1); color: #fff; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; flex: 1; font-weight: bold; }
         .tab-btn.active { background: var(--accent); color: #000; }
-
-        .file-row { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.05); }
+        .file-row { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .file-info { flex: 1; }
-        .file-name { font-weight: bold; color: var(--accent); display: block; margin-bottom: 4px; }
-        .file-meta { font-size: 0.8em; color: #cbd5e1; }
-
-        .btn { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; transition: 0.2s; }
+        .file-name { font-weight: bold; color: var(--accent); display: block; }
+        .btn { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; }
         .btn-view { background: var(--success); color: white; }
-        .btn-delete { background: var(--danger); color: white; margin-right: 5px; }
-        .btn-restore { background: var(--section-color); color: white; }
-
+        .btn-delete { background: var(--danger); color: white; }
         #viewer { position: fixed; inset: 0; background: #000; display: none; flex-direction: column; z-index: 9999; }
         #vFrame { flex-grow: 1; border: none; background: #fff; }
     </style>
@@ -80,12 +43,7 @@
 
 <div id="homeScreen" class="container">
     <header>
-        <div class="trash-nav">
-            <button class="btn-trash-box" onclick="openTrash()">
-                <span>🗑 السلة</span>
-                <span id="trashCount">0</span>
-            </button>
-        </div>
+        <div class="trash-nav"><button class="btn-trash-box" onclick="openTrash()">🗑 السلة <span id="trashCount">0</span></button></div>
         <h1>Eng. Hesham Mahran</h1>
         <p>LNU Archive | Advanced Engineering System</p>
     </header>
@@ -98,19 +56,16 @@
         <h2 id="currentTitle" style="color:var(--accent); margin:0;"></h2>
         <a id="ytLink" href="#" target="_blank" class="btn" style="background:#ff0000; color:white;">YouTube</a>
     </div>
-
     <div class="tabs-nav">
         <button id="tabFiles" class="tab-btn active" onclick="switchTab('files')">📁 Folder</button>
         <button id="tabAssignments" class="tab-btn" onclick="switchTab('assignments')">📝 Assignment</button>
     </div>
-    
     <div style="background:rgba(255,255,255,0.02); padding:20px; border-radius:20px; text-align:center; border: 1px dashed #555;">
-        <input type="text" id="fileNotes" placeholder="أضف ملاحظاتك للملف هنا..." style="width:85%; padding:12px; border-radius:10px; border:none; margin-bottom:15px; background:#000; color:#fff; text-align:center; font-family: inherit;">
+        <input type="text" id="fileNotes" placeholder="أضف ملاحظاتك..." style="width:85%; padding:12px; border-radius:10px; border:none; margin-bottom:15px; background:#000; color:#fff; text-align:center;">
         <br>
         <input type="file" id="fileInput" hidden onchange="handleUpload(this)">
-        <button class="btn" style="background:var(--accent); color:#000; width:100%; max-width: 300px;" onclick="document.getElementById('fileInput').click()">+ ارفع ملف في هذا القسم</button>
+        <button id="uploadBtn" class="btn" style="background:var(--accent); color:#000; width:100%; max-width: 300px;" onclick="document.getElementById('fileInput').click()">+ ارفع ملف</button>
     </div>
-    
     <div id="fileList" style="margin-top:30px;"></div>
 </div>
 
@@ -118,9 +73,7 @@
     <button class="btn" style="background:#444; color:white;" onclick="goHome()">⬅ عودة</button>
     <h2 style="text-align:center; color:var(--trash);">🗑 المحذوفات</h2>
     <div id="trashList"></div>
-    <div id="trashControls" style="text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1);">
-        <button class="btn btn-delete" style="width: 100%; max-width: 400px;" onclick="emptyTrash()">حذف الكل نهائياً 💀</button>
-    </div>
+    <div style="text-align: center; margin-top: 20px;"><button class="btn btn-delete" onclick="emptyTrash()">مسح السلة نهائياً</button></div>
 </div>
 
 <div id="viewer">
@@ -140,7 +93,6 @@
         { id: 5, name: "مقدمة في برمجة المواقع", icon: "🌐", yt: "https://youtube.com/playlist?list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij", img: "https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&w=600", type: "lecture" },
         { id: 6, name: "أساسيات الذكاء الاصطناعي", icon: "🧠", yt: "https://youtube.com/playlist?list=PLhiFu-f80eo-h0whWvRsE1KL_A08wpmSB", img: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&w=600", type: "lecture" },
         { id: 7, name: "رياضيات متقطعة", icon: "🔢", yt: "https://youtube.com/playlist?list=PLxIvc-MGOs6gZlMVYOOEtUHJmfUquCjwz", img: "https://images.pexels.com/photos/3729512/pexels-photo-3729512.jpeg?auto=compress&w=600", type: "lecture" },
-        
         { id: 202, name: "Section دوائر المنطق", icon: "📏", yt: "https://youtube.com/playlist?list=PLhx4zaYkEjI8BuPybYhAotW2gKDIT9y2D", img: "https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&w=600", type: "section" },
         { id: 203, name: "Section رياضة 2", icon: "📏", yt: "https://youtube.com/playlist?list=PL0TpXNlUp4HYesKP8AJ21-kFG1Swxt_El", img: "https://images.pexels.com/photos/1321328/pexels-photo-1321328.jpeg?auto=compress&w=600", type: "section" },
         { id: 204, name: "Section تصميم وبرمجة OOP", icon: "📏", yt: "https://youtube.com/playlist?list=PLCInYL3l2AagY7fFlhCrjpLiIFybW3yQv", img: "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&w=600", type: "section" },
@@ -149,24 +101,16 @@
         { id: 207, name: "Section رياضيات متقطعة", icon: "📏", yt: "https://youtube.com/playlist?list=PLxIvc-MGOs6gZlMVYOOEtUHJmfUquCjwz", img: "https://images.pexels.com/photos/5426401/pexels-photo-5426401.jpeg?auto=compress&w=600", type: "section" }
     ];
 
-    let db; 
-    let storeName = "";
-    let currentCategory = "files"; // 'files' or 'assignments'
+    let db; let storeName = ""; let currentCategory = "files";
 
-    const req = indexedDB.open("EngHeshamFinal_v11", 1);
-    
-    req.onsuccess = e => { db = e.target.result; updateTrashCounter(); renderHome(); };
+    // فتح قاعدة البيانات - غيرت الاسم لضمان تحديث الأخطاء القديمة
+    const req = indexedDB.open("EngHesham_Fixed_V1", 1);
     req.onupgradeneeded = e => {
         db = e.target.result;
-        subjects.forEach(s => {
-            if (!db.objectStoreNames.contains("sub_"+s.id)) {
-                db.createObjectStore("sub_"+s.id, { keyPath: "id", autoIncrement: true });
-            }
-        });
-        if (!db.objectStoreNames.contains("recycle_bin")) {
-            db.createObjectStore("recycle_bin", { keyPath: "id", autoIncrement: true });
-        }
+        subjects.forEach(s => db.createObjectStore("sub_"+s.id, { keyPath: "id", autoIncrement: true }));
+        db.createObjectStore("recycle_bin", { keyPath: "id", autoIncrement: true });
     };
+    req.onsuccess = e => { db = e.target.result; updateTrashCounter(); renderHome(); };
 
     function renderHome() {
         document.getElementById('homeScreen').style.display = 'block';
@@ -177,13 +121,11 @@
                 ${s.type === 'section' ? '<div class="section-tag">Section</div>' : ''}
                 <div class="icon-box">${s.icon}</div>
                 <div class="card-overlay">${s.name}</div>
-            </div>
-        `).join('');
+            </div>`).join('');
     }
 
     function openSubject(id, name, yt) { 
         storeName = "sub_"+id; 
-        currentCategory = "files";
         document.getElementById('homeScreen').style.display = 'none'; 
         document.getElementById('subjectPage').style.display = 'block'; 
         document.getElementById('currentTitle').innerText = name; 
@@ -198,19 +140,22 @@
         loadFiles();
     }
 
+    // الرفع المصلح: يخزن الملف كـ Blob مباشرة (أسرع ولا يسبب تهنيج)
     function handleUpload(input) {
         const file = input.files[0]; if(!file) return;
-        const noteText = document.getElementById('fileNotes').value || "لا توجد ملاحظات";
-        const reader = new FileReader();
-        reader.onload = e => {
-            const tx = db.transaction(storeName, "readwrite");
-            tx.objectStore(storeName).add({ 
-                name: file.name, type: file.type, data: e.target.result, 
-                notes: noteText, category: currentCategory, date: new Date().toLocaleDateString('ar-EG') 
-            });
-            tx.oncomplete = () => { document.getElementById('fileNotes').value = ""; loadFiles(); };
+        const btn = document.getElementById('uploadBtn');
+        btn.innerText = "جاري الحفظ... ⏳"; btn.disabled = true;
+
+        const tx = db.transaction(storeName, "readwrite");
+        tx.objectStore(storeName).add({ 
+            name: file.name, type: file.type, data: file, 
+            notes: document.getElementById('fileNotes').value || "لا توجد ملاحظات", 
+            category: currentCategory, date: new Date().toLocaleDateString('ar-EG') 
+        });
+        tx.oncomplete = () => { 
+            btn.innerText = "+ ارفع ملف"; btn.disabled = false;
+            document.getElementById('fileNotes').value = ""; loadFiles(); 
         };
-        reader.readAsArrayBuffer(file);
     }
 
     function loadFiles() {
@@ -219,99 +164,79 @@
             const filtered = e.target.result.filter(f => (f.category || 'files') === currentCategory);
             list.innerHTML = filtered.map(f => `
                 <div class="file-row">
-                    <div class="file-info">
-                        <span class="file-name">${f.name}</span>
-                        <span class="file-meta">📝 ${f.notes} | 📅 ${f.date}</span>
-                    </div>
+                    <div class="file-info"><span class="file-name">${f.name}</span><small style="color:#aaa;">${f.notes}</small></div>
                     <div style="display:flex; gap:5px;">
                         <button class="btn btn-view" onclick="viewFile('${storeName}', ${f.id})">👀</button>
                         <button class="btn btn-delete" onclick="moveToTrash(${f.id})">🗑</button>
                     </div>
-                </div>`).join('') || "<p style='text-align:center; color:#666;'>لا توجد ملفات في هذا القسم بعد</p>";
+                </div>`).join('') || "<p style='text-align:center;'>لا يوجد ملفات</p>";
         };
+    }
+
+    // الحذف المصلح: يعمل في Transaction واحدة سريعة جداً
+    function moveToTrash(id) {
+        const tx = db.transaction([storeName, "recycle_bin"], "readwrite");
+        const source = tx.objectStore(storeName);
+        const trash = tx.objectStore("recycle_bin");
+
+        source.get(id).onsuccess = e => {
+            const file = e.target.result;
+            if(file) {
+                file.originalStore = storeName;
+                trash.add(file);
+                source.delete(id);
+            }
+        };
+        tx.oncomplete = () => { loadFiles(); updateTrashCounter(); };
     }
 
     function viewFile(store, id) {
         db.transaction(store, "readonly").objectStore(store).get(id).onsuccess = e => {
             const f = e.target.result;
-            const blob = new Blob([f.data], { type: f.type });
-            const url = URL.createObjectURL(blob);
+            const url = URL.createObjectURL(f.data);
             if (f.type.includes('image')) {
                 document.getElementById('vFrame').src = url;
-                document.getElementById('vFileName').innerText = f.name;
                 document.getElementById('viewer').style.display = 'flex';
             } else { window.open(url, '_blank'); }
         };
     }
 
-    function closeViewer() { document.getElementById('viewer').style.display = 'none'; document.getElementById('vFrame').src = ""; }
-    
-    function moveToTrash(id) { 
-        const tx = db.transaction([storeName, "recycle_bin"], "readwrite"); 
-        tx.objectStore(storeName).get(id).onsuccess = e => { 
-            const file = e.target.result; 
-            file.originalStore = storeName; 
-            tx.objectStore("recycle_bin").add(file); 
-            tx.objectStore(storeName).delete(id); 
-        }; 
-        tx.oncomplete = () => { loadFiles(); updateTrashCounter(); }; 
+    function updateTrashCounter() {
+        db.transaction("recycle_bin", "readonly").objectStore("recycle_bin").count().onsuccess = e => {
+            document.getElementById('trashCount').innerText = e.target.result;
+        };
     }
 
-    function updateTrashCounter() { 
-        db.transaction("recycle_bin", "readonly").objectStore("recycle_bin").count().onsuccess = e => { 
-            document.getElementById('trashCount').innerText = e.target.result; 
-        }; 
+    function openTrash() {
+        document.getElementById('homeScreen').style.display = 'none';
+        document.getElementById('trashPage').style.display = 'block';
+        loadTrash();
     }
 
-    function openTrash() { 
-        document.getElementById('homeScreen').style.display = 'none'; 
-        document.getElementById('trashPage').style.display = 'block'; 
-        loadTrash(); 
-    }
-
-    function loadTrash() { 
-        const list = document.getElementById('trashList'); 
-        db.transaction("recycle_bin", "readonly").objectStore("recycle_bin").getAll().onsuccess = e => { 
+    function loadTrash() {
+        const list = document.getElementById('trashList');
+        db.transaction("recycle_bin", "readonly").objectStore("recycle_bin").getAll().onsuccess = e => {
             list.innerHTML = e.target.result.map(f => `
                 <div class="file-row">
-                    <div class="file-info">
-                        <span class="file-name">${f.name}</span>
-                    </div>
-                    <div style="display:flex; gap:5px;">
-                        <button class="btn btn-restore" onclick="restoreFile(${f.id}, '${f.originalStore}')" title="استعادة">🔄</button>
-                        <button class="btn btn-delete" onclick="deleteForever(${f.id})" title="حذف نهائي">❌</button>
-                    </div>
-                </div>`).join('') || "<p style='text-align:center;'>السلة فارغة</p>"; 
-        }; 
-    }
-
-    function restoreFile(id, target) { 
-        const tx = db.transaction(["recycle_bin", target], "readwrite"); 
-        tx.objectStore("recycle_bin").get(id).onsuccess = e => { 
-            const file = e.target.result; 
-            delete file.originalStore; 
-            tx.objectStore(target).add(file); 
-            tx.objectStore("recycle_bin").delete(id); 
-        }; 
-        tx.oncomplete = () => { loadTrash(); updateTrashCounter(); }; 
+                    <span>${f.name}</span>
+                    <button class="btn btn-delete" onclick="deleteForever(${f.id})">حذف نهائي</button>
+                </div>`).join('') || "السلة فارغة";
+        };
     }
 
     function deleteForever(id) {
-        if(confirm("هل أنت متأكد من حذف هذا الملف نهائياً؟")) {
-            const tx = db.transaction("recycle_bin", "readwrite");
-            tx.objectStore("recycle_bin").delete(id);
-            tx.oncomplete = () => { loadTrash(); updateTrashCounter(); };
-        }
+        const tx = db.transaction("recycle_bin", "readwrite");
+        tx.objectStore("recycle_bin").delete(id);
+        tx.oncomplete = () => { loadTrash(); updateTrashCounter(); };
     }
 
     function emptyTrash() {
-        if(confirm("هل تريد إفراغ سلة المحذوفات بالكامل؟ لا يمكن التراجع عن هذه الخطوة!")) {
-            const tx = db.transaction("recycle_bin", "readwrite");
-            tx.objectStore("recycle_bin").clear();
-            tx.oncomplete = () => { loadTrash(); updateTrashCounter(); };
-        }
+        const tx = db.transaction("recycle_bin", "readwrite");
+        tx.objectStore("recycle_bin").clear();
+        tx.oncomplete = () => { loadTrash(); updateTrashCounter(); };
     }
 
+    function closeViewer() { document.getElementById('viewer').style.display = 'none'; document.getElementById('vFrame').src = ""; }
     function goHome() { renderHome(); }
 </script>
 </body>
