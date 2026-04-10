@@ -1,243 +1,194 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <title>متجر الكتب | نظام الحماية المتكامل</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/605/605110.png">
-    <title>Eng. Hesham Mahran | LNU Archive Pro</title>
-    <style>
-        /* ستايلاتك كما هي بدون أي تغيير */
-        :root { 
-            --primary: #0f172a; --accent: #fbbf24; --section-color: #38bdf8; 
-            --danger: #ef4444; --success: #10b981; --trash: #94a3b8; 
-            --main-bg-image: url("https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg"); 
-        }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; color: #fff; overflow-x: hidden; background: #0b0f19; min-height: 100vh; }
-        body::before { content: ""; position: fixed; inset: 0; background: linear-gradient(rgba(11, 15, 25, 0.9), rgba(11, 15, 25, 0.9)), var(--main-bg-image) no-repeat center center fixed; background-size: cover; z-index: -1; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px 15px; }
-        header { text-align: center; margin-bottom: 30px; }
-        header h1 { color: var(--accent); font-size: clamp(2em, 8vw, 3em); margin: 0; text-shadow: 0 0 15px rgba(251, 191, 36, 0.3); }
-        .trash-nav { display: flex; justify-content: flex-start; margin-bottom: 10px; }
-        .btn-trash-box { background: rgba(255,255,255,0.05); border: 1px solid var(--trash); color: var(--trash); padding: 8px 12px; border-radius: 12px; cursor: pointer; font-weight: bold; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
-        .folder-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .subject-card { height: 190px; border-radius: 20px; position: relative; overflow: hidden; cursor: pointer; transition: 0.3s; border: 1px solid rgba(255,255,255,0.1); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .subject-card:hover { transform: translateY(-8px); border-color: var(--accent); }
-        .icon-box { font-size: 2.8em; z-index: 2; }
-        .card-overlay { position: absolute; bottom: 0; width: 100%; padding: 12px; background: rgba(0,0,0,0.85); text-align: center; font-weight: bold; }
-        .section-tag { position: absolute; top: 12px; left: 12px; background: var(--section-color); color: white; padding: 4px 12px; border-radius: 15px; font-size: 0.75em; font-weight: bold; z-index: 3; }
-        .page { display: none; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(15px); border-radius: 25px; padding: 25px; margin-top: 15px; border: 1px solid rgba(255,255,255,0.1); }
-        .tabs-nav { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; }
-        .tab-btn { background: rgba(255,255,255,0.1); color: #fff; padding: 10px 20px; border-radius: 10px; border: none; cursor: pointer; flex: 1; font-weight: bold; }
-        .tab-btn.active { background: var(--accent); color: #000; }
-        .file-row { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .file-info { flex: 1; }
-        .file-name { font-weight: bold; color: var(--accent); display: block; }
-        .btn { padding: 10px 18px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; }
-        .btn-view { background: var(--success); color: white; }
-        .btn-delete { background: var(--danger); color: white; }
-        #viewer { position: fixed; inset: 0; background: #000; display: none; flex-direction: column; z-index: 9999; }
-        #vFrame { flex-grow: 1; border: none; background: #fff; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="homeScreen" class="container">
+    <div id="login-overlay">
+        <div class="login-container">
+            <div class="login-logo">
+                <img src="https://thumbs.dreamstime.com/b/book-store-logo-isolated-white-background-book-store-logo-isolated-white-background-simple-vector-logo-413564703.jpg" alt="شعار المتجر">
+                <h2>دخول المتجر</h2>
+                <p id="form-info" style="font-size: 0.8rem; color: #888; margin-bottom: 15px;">يرجى تسجيل الدخول للمتابعة</p>
+            </div>
+            
+            <form id="login-form">
+                <div class="input-group">
+                    <label>البريد الإلكتروني</label>
+                    <input type="email" id="email" placeholder="example@mail.com" required>
+                </div>
+                <div class="input-group">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="password" placeholder="********" required>
+                </div>
+                <button type="submit" class="login-btn">دخول / تسجيل جديد</button>
+            </form>
+
+            <div class="login-footer">
+                <a href="#" id="forgot-password">نسيت كلمة المرور؟</a>
+            </div>
+            <div id="login-msg"></div>
+        </div>
+    </div>
+
     <header>
-        <div class="trash-nav"><button class="btn-trash-box" onclick="openTrash()">🗑 السلة <span id="trashCount">0</span></button></div>
-        <h1>Eng. Hesham Mahran</h1>
-        <p>LNU Archive | Advanced Engineering System</p>
+        <div class="header-inner">
+            <div class="logo-area">
+                <img src="https://thumbs.dreamstime.com/b/book-store-logo-isolated-white-background-book-store-logo-isolated-white-background-simple-vector-logo-413564703.jpg" alt="Logo">
+                <h1>📚 متجر الكتب</h1>
+            </div>
+            <nav>
+                <a href="#">الرئيسية</a>
+                <a href="#books">الكتب</a>
+                <a href="#about">عن المتجر</a>
+                <a href="#" onclick="location.reload()">تسجيل الخروج</a>
+            </nav>
+        </div>
     </header>
-    <div class="folder-grid" id="folderGrid"></div>
-</div>
 
-<div id="subjectPage" class="container page">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <button class="btn" style="background:#444; color:white;" onclick="goHome()">⬅ عودة</button>
-        <h2 id="currentTitle" style="color:var(--accent); margin:0;"></h2>
-        <a id="ytLink" href="#" target="_blank" class="btn" style="background:#ff0000; color:white;">YouTube</a>
+    <div class="hero">
+        <h2>مرحباً بك في عالم القراءة</h2>
+        <p>اكتشف آلاف الكتب والروايات الأصلية في مكان واحد</p>
+        <a href="#books" class="hero-btn">تصفح الكتب</a>
     </div>
-    <div class="tabs-nav">
-        <button id="tabFiles" class="tab-btn active" onclick="switchTab('files')">📁 Folder</button>
-        <button id="tabAssignments" class="tab-btn" onclick="switchTab('assignments')">📝 Assignment</button>
-    </div>
-    <div style="background:rgba(255,255,255,0.02); padding:20px; border-radius:20px; text-align:center; border: 1px dashed #555;">
-        <input type="text" id="fileNotes" placeholder="أضف ملاحظاتك..." style="width:85%; padding:12px; border-radius:10px; border:none; margin-bottom:15px; background:#000; color:#fff; text-align:center;">
-        <br>
-        <input type="file" id="fileInput" hidden onchange="handleUpload(this)">
-        <button id="uploadBtn" class="btn" style="background:var(--accent); color:#000; width:100%; max-width: 300px;" onclick="document.getElementById('fileInput').click()">+ ارفع ملف</button>
-    </div>
-    <div id="fileList" style="margin-top:30px;"></div>
-</div>
 
-<div id="trashPage" class="container page">
-    <button class="btn" style="background:#444; color:white;" onclick="goHome()">⬅ عودة</button>
-    <h2 style="text-align:center; color:var(--trash);">🗑 المحذوفات</h2>
-    <div id="trashList"></div>
-    <div style="text-align: center; margin-top: 20px;"><button class="btn btn-delete" onclick="emptyTrash()">مسح السلة نهائياً</button></div>
-</div>
-
-<div id="viewer">
-    <div style="padding:15px; background:#111; display:flex; justify-content:space-between; align-items:center;">
-        <span id="vFileName" style="color:var(--accent);">معاينة</span>
-        <button class="btn" style="background:var(--danger); color:white;" onclick="closeViewer()">إغلاق ✖</button>
-    </div>
-    <iframe id="vFrame"></iframe>
-</div>
-
-<script>
-    const subjects = [
-        { id: 1, name: "قضايا مجتمعية", icon: "⚖️", yt: "https://youtube.com/playlist?list=PL4Haigbjr7Kou8d9nZ90H-A_LlC60Vp_8", img: "https://images.pexels.com/photos/606541/pexels-photo-606541.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 2, name: "دوائر المنطق", icon: "🔌", yt: "https://youtube.com/playlist?list=PLhx4zaYkEjI8BuPybYhAotW2gKDIT9y2D", img: "https://images.pexels.com/photos/2582937/pexels-photo-2582937.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 3, name: "رياضة 2", icon: "📐", yt: "https://youtube.com/playlist?list=PL0TpXNlUp4HYesKP8AJ21-kFG1Swxt_El", img: "https://images.pexels.com/photos/623919/pexels-photo-623919.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 4, name: "تصميم وبرمجة OOP", icon: "🏗️", yt: "https://youtube.com/playlist?list=PLCInYL3l2AagY7fFlhCrjpLiIFybW3yQv", img: "https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 5, name: "مقدمة في برمجة المواقع", icon: "🌐", yt: "https://youtube.com/playlist?list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij", img: "https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 6, name: "أساسيات الذكاء الاصطناعي", icon: "🧠", yt: "https://youtube.com/playlist?list=PLhiFu-f80eo-h0whWvRsE1KL_A08wpmSB", img: "https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 7, name: "رياضيات متقطعة", icon: "🔢", yt: "https://youtube.com/playlist?list=PLxIvc-MGOs6gZlMVYOOEtUHJmfUquCjwz", img: "https://images.pexels.com/photos/3729512/pexels-photo-3729512.jpeg?auto=compress&w=600", type: "lecture" },
-        { id: 202, name: "Section دوائر المنطق", icon: "📏", yt: "https://youtube.com/playlist?list=PLhx4zaYkEjI8BuPybYhAotW2gKDIT9y2D", img: "https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&w=600", type: "section" },
-        { id: 203, name: "Section رياضة 2", icon: "📏", yt: "https://youtube.com/playlist?list=PL0TpXNlUp4HYesKP8AJ21-kFG1Swxt_El", img: "https://images.pexels.com/photos/1321328/pexels-photo-1321328.jpeg?auto=compress&w=600", type: "section" },
-        { id: 204, name: "Section تصميم وبرمجة OOP", icon: "📏", yt: "https://youtube.com/playlist?list=PLCInYL3l2AagY7fFlhCrjpLiIFybW3yQv", img: "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg?auto=compress&w=600", type: "section" },
-        { id: 205, name: "Section مقدمة في برمجة المواقع", icon: "📏", yt: "https://youtube.com/playlist?list=PLknwEmKsW8OtLRQPTLms79499meY2D6ij", img: "https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&w=600", type: "section" },
-        { id: 206, name: "Section أساسيات الذكاء الاصطناعي", icon: "📏", yt: "https://youtube.com/playlist?list=PLhiFu-f80eo-h0whWvRsE1KL_A08wpmSB", img: "https://images.pexels.com/photos/3913025/pexels-photo-3913025.jpeg?auto=compress&w=600", type: "section" },
-        { id: 207, name: "Section رياضيات متقطعة", icon: "📏", yt: "https://youtube.com/playlist?list=PLxIvc-MGOs6gZlMVYOOEtUHJmfUquCjwz", img: "https://images.pexels.com/photos/5426401/pexels-photo-5426401.jpeg?auto=compress&w=600", type: "section" }
-    ];
-
-    let db; let storeName = ""; let currentCategory = "files";
-
-    // فتح قاعدة البيانات - غيرت الاسم لضمان تحديث الأخطاء القديمة
-    const req = indexedDB.open("EngHesham_Fixed_V1", 1);
-    req.onupgradeneeded = e => {
-        db = e.target.result;
-        subjects.forEach(s => db.createObjectStore("sub_"+s.id, { keyPath: "id", autoIncrement: true }));
-        db.createObjectStore("recycle_bin", { keyPath: "id", autoIncrement: true });
-    };
-    req.onsuccess = e => { db = e.target.result; updateTrashCounter(); renderHome(); };
-
-    function renderHome() {
-        document.getElementById('homeScreen').style.display = 'block';
-        document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
-        const grid = document.getElementById('folderGrid');
-        grid.innerHTML = subjects.map(s => `
-            <div class="subject-card" style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${s.img}')" onclick="openSubject(${s.id}, '${s.name}', '${s.yt}')">
-                ${s.type === 'section' ? '<div class="section-tag">Section</div>' : ''}
-                <div class="icon-box">${s.icon}</div>
-                <div class="card-overlay">${s.name}</div>
-            </div>`).join('');
-    }
-
-    function openSubject(id, name, yt) { 
-        storeName = "sub_"+id; 
-        document.getElementById('homeScreen').style.display = 'none'; 
-        document.getElementById('subjectPage').style.display = 'block'; 
-        document.getElementById('currentTitle').innerText = name; 
-        document.getElementById('ytLink').href = yt; 
-        switchTab('files'); 
-    }
-
-    function switchTab(cat) {
-        currentCategory = cat;
-        document.getElementById('tabFiles').className = cat === 'files' ? 'tab-btn active' : 'tab-btn';
-        document.getElementById('tabAssignments').className = cat === 'assignments' ? 'tab-btn active' : 'tab-btn';
-        loadFiles();
-    }
-
-    // الرفع المصلح: يخزن الملف كـ Blob مباشرة (أسرع ولا يسبب تهنيج)
-    function handleUpload(input) {
-        const file = input.files[0]; if(!file) return;
-        const btn = document.getElementById('uploadBtn');
-        btn.innerText = "جاري الحفظ... ⏳"; btn.disabled = true;
-
-        const tx = db.transaction(storeName, "readwrite");
-        tx.objectStore(storeName).add({ 
-            name: file.name, type: file.type, data: file, 
-            notes: document.getElementById('fileNotes').value || "لا توجد ملاحظات", 
-            category: currentCategory, date: new Date().toLocaleDateString('ar-EG') 
-        });
-        tx.oncomplete = () => { 
-            btn.innerText = "+ ارفع ملف"; btn.disabled = false;
-            document.getElementById('fileNotes').value = ""; loadFiles(); 
-        };
-    }
-
-    function loadFiles() {
-        const list = document.getElementById('fileList');
-        db.transaction(storeName, "readonly").objectStore(storeName).getAll().onsuccess = e => {
-            const filtered = e.target.result.filter(f => (f.category || 'files') === currentCategory);
-            list.innerHTML = filtered.map(f => `
-                <div class="file-row">
-                    <div class="file-info"><span class="file-name">${f.name}</span><small style="color:#aaa;">${f.notes}</small></div>
-                    <div style="display:flex; gap:5px;">
-                        <button class="btn btn-view" onclick="viewFile('${storeName}', ${f.id})">👀</button>
-                        <button class="btn btn-delete" onclick="moveToTrash(${f.id})">🗑</button>
+    <main>
+        <div class="section-wrapper" id="books">
+            <h2>الكتب المميزة</h2>
+            <div class="books-grid">
+                <div class="book-card">
+                    <img src="https://img.wattpad.com/9358eb7bbf5322eae6e137c8db0d3cad861ea79f/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f776174747061642d6d656469612d736572766963652f53746f7279496d6167652f34667965725865494578465853513d3d2d3335303032393031312e313439333663313535663639656531373433343631303433333731342e6a7067?s=fit&w=720&h=720" alt="Book">
+                    <div class="book-info">
+                        <h3>Attack on Titan</h3>
+                        <p class="desc">صراع البشرية للنجاة ضد العمالقة</p>
+                        <div class="price-row"><span class="price-new">100$</span></div>
+                        <button class="buy-btn">اشتري الآن</button>
                     </div>
-                </div>`).join('') || "<p style='text-align:center;'>لا يوجد ملفات</p>";
-        };
-    }
+                </div>
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/81YkqyaFVEL._AC_UF1000,1000_QL80_.jpg" alt="Book">
+                    <div class="book-info">
+                        <h3>One Piece</h3>
+                        <p class="desc">مغامرات البحث عن أعظم كنز في التاريخ</p>
+                        <div class="price-row"><span class="price-new">75$</span></div>
+                        <button class="buy-btn">اشتري الآن</button>
+                    </div>
+                </div>
+                <div class="book-card">
+                    <img src="https://m.media-amazon.com/images/I/71aFt4+OTOL._AC_UF1000,1000_QL80_.jpg" alt="Book">
+                    <div class="book-info">
+                        <h3>Naruto</h3>
+                        <p class="desc">رحلة صبي النينجا ليصبح قائد قريته</p>
+                        <div class="price-row"><span class="price-new">80$</span></div>
+                        <button class="buy-btn">اشتري الآن</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    // الحذف المصلح: يعمل في Transaction واحدة سريعة جداً
-    function moveToTrash(id) {
-        const tx = db.transaction([storeName, "recycle_bin"], "readwrite");
-        const source = tx.objectStore(storeName);
-        const trash = tx.objectStore("recycle_bin");
+        <div class="content-row" id="about">
+            <div class="main-content">
+                <div class="section-wrapper">
+                    <h2>ساعات العمل</h2>
+                    <table>
+                        <tr><th>اليوم</th><th>الساعات</th></tr>
+                        <tr><td>السبت</td><td>9 ص — 9 م</td></tr>
+                        <tr><td>الأحد</td><td>9 ص — 9 م</td></tr>
+                        <tr><td>الاثنين</td><td>9 ص — 9 م</td></tr>
+                        <tr><td>الثلاثاء</td><td>9 ص — 9 م</td></tr>
+                        <tr><td>الأربعاء</td><td>9 ص — 9 م</td></tr>
+                        <tr><td>الخميس</td><td>9 ص — 6 م</td></tr>
+                        <tr><td>الجمعة</td><td style="color:#ff4d4d">مغلق</td></tr>
+                    </table>
+                </div>
+            </div>
 
-        source.get(id).onsuccess = e => {
-            const file = e.target.result;
-            if(file) {
-                file.originalStore = storeName;
-                trash.add(file);
-                source.delete(id);
+            <aside>
+                <h3>تصنيفات الكتب</h3>
+                <ol>
+                    <li>مغامرات</li>
+                    <li>رومانسي</li>
+                    <li>بوليسي</li>
+                    <li>فانتازيا</li>
+                </ol>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <p>📧 للتواصل: mariealyuossif@gmail.com</p>
+        <p>📞 للطلب والدعم: 01000000000</p>
+        <p>🌐 لموقعنا: www.bookstore.com</p>
+        <p>📍 العنوان: 123 شارع الكتب، القاهرة، مصر</p>
+        <p>البريد الإلكتروني: heshammahran290@gmail.com</p>
+        <p>جميع الحقوق محفوظة &copy; 2026</p>
+    </footer>
+
+    <script>
+        const loginForm = document.getElementById('login-form');
+        const loginOverlay = document.getElementById('login-overlay');
+        const msgBox = document.getElementById('login-msg');
+        const forgotBtn = document.getElementById('forgot-password');
+
+        // 1. نظام الدخول والتسجيل
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const storedPass = localStorage.getItem(email);
+
+            if (storedPass) {
+                if (storedPass === password) {
+                    msgBox.style.color = "#4CAF50";
+                    msgBox.innerText = "أهلاً بك مجدداً! جاري التحميل...";
+                    setTimeout(() => loginOverlay.style.display = 'none', 1000);
+                } else {
+                    msgBox.style.color = "#ff4d4d";
+                    msgBox.innerText = "كلمة المرور غير صحيحة!";
+                }
+            } else {
+                localStorage.setItem(email, password);
+                msgBox.style.color = "#ffda79";
+                msgBox.innerText = "تم إنشاء حسابك بنجاح! مرحباً بك.";
+                setTimeout(() => loginOverlay.style.display = 'none', 1200);
             }
-        };
-        tx.oncomplete = () => { loadFiles(); updateTrashCounter(); };
-    }
+        });
 
-    function viewFile(store, id) {
-        db.transaction(store, "readonly").objectStore(store).get(id).onsuccess = e => {
-            const f = e.target.result;
-            const url = URL.createObjectURL(f.data);
-            if (f.type.includes('image')) {
-                document.getElementById('vFrame').src = url;
-                document.getElementById('viewer').style.display = 'flex';
-            } else { window.open(url, '_blank'); }
-        };
-    }
+        // 2. نظام استعادة كلمة المرور (محاكاة)
+        forgotBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
 
-    function updateTrashCounter() {
-        db.transaction("recycle_bin", "readonly").objectStore("recycle_bin").count().onsuccess = e => {
-            document.getElementById('trashCount').innerText = e.target.result;
-        };
-    }
+            if (!email) {
+                alert("يرجى إدخال بريدك الإلكتروني أولاً في الحقل المخصص.");
+                return;
+            }
 
-    function openTrash() {
-        document.getElementById('homeScreen').style.display = 'none';
-        document.getElementById('trashPage').style.display = 'block';
-        loadTrash();
-    }
+            const storedPass = localStorage.getItem(email);
+            if (!storedPass) {
+                alert("هذا البريد غير مسجل لدينا!");
+                return;
+            }
 
-    function loadTrash() {
-        const list = document.getElementById('trashList');
-        db.transaction("recycle_bin", "readonly").objectStore("recycle_bin").getAll().onsuccess = e => {
-            list.innerHTML = e.target.result.map(f => `
-                <div class="file-row">
-                    <span>${f.name}</span>
-                    <button class="btn btn-delete" onclick="deleteForever(${f.id})">حذف نهائي</button>
-                </div>`).join('') || "السلة فارغة";
-        };
-    }
+            // إنشاء كود عشوائي
+            const code = Math.floor(1000 + Math.random() * 9000);
+            alert("تم إرسال كود التغيير إلى بريدك (للتجربة الكود هو: " + code + ")");
 
-    function deleteForever(id) {
-        const tx = db.transaction("recycle_bin", "readwrite");
-        tx.objectStore("recycle_bin").delete(id);
-        tx.oncomplete = () => { loadTrash(); updateTrashCounter(); };
-    }
-
-    function emptyTrash() {
-        const tx = db.transaction("recycle_bin", "readwrite");
-        tx.objectStore("recycle_bin").clear();
-        tx.oncomplete = () => { loadTrash(); updateTrashCounter(); };
-    }
-
-    function closeViewer() { document.getElementById('viewer').style.display = 'none'; document.getElementById('vFrame').src = ""; }
-    function goHome() { renderHome(); }
-</script>
+            const userCode = prompt("أدخل كود التحقق المكون من 4 أرقام:");
+            if (userCode == code) {
+                const newPass = prompt("أدخل كلمة المرور الجديدة:");
+                if (newPass) {
+                    localStorage.setItem(email, newPass);
+                    alert("تم تحديث كلمة المرور بنجاح! يمكنك الدخول الآن.");
+                }
+            } else {
+                alert("الكود الذي أدخلته غير صحيح!");
+            }
+        });
+    </script>
 </body>
 </html>
